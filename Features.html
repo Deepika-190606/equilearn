@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Features</title>
+    <style>
+        body {
+            background-color: #E5E7EB;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+        .card {
+            background-color: #FFFFFF;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .card i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .card select, .card textarea, .card input[type="file"] {
+            width: 100%;
+            margin-bottom: 1rem;
+        }
+        .card button {
+            width: 40%;
+            margin-bottom: 1rem;
+        }
+        .card select {
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background: #fff;
+        }
+        .card button {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .show { opacity: 1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Features</h1>
+        <div class="grid">
+            <!-- Text-to-Speech Card -->
+            <div class="card">
+                <i class="fas fa-volume-up"></i>
+                <h2>Text-to-Speech</h2>
+                <select id="ttsLanguage">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="es">Spanish</option>
+                </select>
+                <textarea id="textInput" rows="4" placeholder="Enter text here..."></textarea>
+                <button onclick="convertTextToSpeech()">Convert</button>
+            </div>
+            <!-- Sign Language Card -->
+            <div class="card">
+                <i class="fas fa-sign-language"></i>
+                <h2>Sign Language</h2>
+                <p>Watch sign language tutorials.</p>
+                <video class="w-full rounded" controls>
+                    <source src="" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- Subtitles Card -->
+            <div class="card">
+                <i class="fas fa-closed-captioning"></i>
+                <h2>Subtitles</h2>
+                <p>Upload a video to generate subtitles.</p>
+                <input type="file">
+                <select id="subtitleLanguage">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="hi">Hindi</option>
+                    <option value="fr">French</option>
+                </select>
+                <button onclick="translateSubtitle()">Translate</button>
+            </div>
+        </div>
+    </div>
+    <div class="notification" id="notification">Notification</div>
+    <script>
+        function showNotification(message) {
+            var notification = document.getElementById("notification");
+            notification.textContent = message;
+            notification.classList.add("show");
+            setTimeout(() => notification.classList.remove("show"), 3000);
+        }
+
+        function convertTextToSpeech() {
+            let text = document.getElementById("textInput").value;
+            let lang = document.getElementById("ttsLanguage").value;
+            if (!text || !lang) {
+                showNotification("Please enter text and select a language.");
+                return;
+            }
+            let speech = new SpeechSynthesisUtterance(text);
+            speech.lang = lang;
+            window.speechSynthesis.speak(speech);
+            showNotification("Text converted to speech!");
+        }
+
+        function translateSubtitle() {
+            let lang = document.getElementById("subtitleLanguage").value;
+            if (!lang) {
+                showNotification("Please select a language.");
+                return;
+            }
+            let subtitles = {
+                "en": "Hello, how are you?",
+                "hi": "नमस्ते, आप कैसे हैं?",
+                "fr": "Bonjour, comment ça va?"
+            };
+            document.getElementById("translatedSubtitle").textContent = "Sample Subtitle: " + subtitles[lang];
+            showNotification("Subtitle translated successfully!");
+        }
+    </script>
+</body>
+</html>
